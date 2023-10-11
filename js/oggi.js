@@ -1,4 +1,4 @@
-var classi = ["tpsit", "info", "reti", "inglese", "lettere", "religione", "mate", "gestione", "storia", "gin"];
+let classi = ["tpsit", "info", "reti", "inglese", "lettere", "religione", "mate", "gestione", "storia", "gin"];
 
 /**
     PER TUTTE LE PAGINE:
@@ -15,3 +15,29 @@ var classi = ["tpsit", "info", "reti", "inglese", "lettere", "religione", "mate"
         
         RICORDO DI NON DIMENTICARE IL GIORNO DEL MESE!
  */
+
+window.onload = async () => {
+    let date = new Date();
+    let giorno = date.getDate();
+
+    // Metto la data corrente di oggi
+    document.getElementById("dataDinamica").innerHTML = `OGGI: ${giorno} ottobre`;
+
+    // Recupero gli eventi dal server
+    let busta = await fetch("server/recuperaEventi.php");
+    busta = await busta.json();
+
+    // Carico gli eventi del giorno corrente
+    caricaGiorno(busta.evento, giorno);
+}
+
+function caricaGiorno(eventi, giorno) { 
+    let div = document.getElementById("evento");
+    eventi.forEach(evento => {
+        let data = evento.data.split("-");
+        if(data[2] == giorno){
+            div.innerHTML += `<div class="${classi[(evento.codDesc)-1]}"></div>`;
+        }
+    });
+
+}

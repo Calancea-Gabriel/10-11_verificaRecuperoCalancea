@@ -1,4 +1,4 @@
-var classi = ["tpsit", "info", "reti", "inglese", "lettere", "religione", "mate", "gestione", "storia", "gin"];
+let classi = ["tpsit", "info", "reti", "inglese", "lettere", "religione", "mate", "gestione", "storia", "gin"];
 
 
 /**
@@ -17,3 +17,25 @@ var classi = ["tpsit", "info", "reti", "inglese", "lettere", "religione", "mate"
         completando in modo dinamico la data con quella selezionata 
         e la fascia oraria eventualmente non compilata di quel giorno
  */
+
+window.onload = async () => {
+    let busta = await fetch("server/recuperaEventi.php");
+    busta = await busta.json();
+
+    caricaGiorni(busta.evento);
+}
+
+// function per caricare gli eventi nel calendario
+function caricaGiorni(eventi) { 
+    console.log(eventi);
+    for(let i = 1; i < 31; i++){
+        let giorno = document.getElementById("att" + i);
+        eventi.forEach(evento => {
+            let data = evento.data.split("-");
+            if(data[2] == i){
+                giorno.innerHTML += `<div class="${classi[(evento.codDesc)-1]}"></div>`;
+            }
+        });
+    }
+
+}
